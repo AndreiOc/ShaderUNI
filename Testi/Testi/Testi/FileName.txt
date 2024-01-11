@@ -1,0 +1,39 @@
+    VERTEX OurVertices[] =
+    {
+        {-1.0f, -1.0f, 0.0f, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f)},
+        {-1.0f, -0.5f, 0.0f, D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f)},
+        {-0.5f, -1.0f, 0.0f, D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f)},
+        {-0.5f, -0.5f, 0.0f, D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f)}
+    };
+
+    VERTEX OurVertices1[] =
+    {
+        {0.5f, 0.5f, 0.0f, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f)},
+        {0.5f, 1.0f, 0.0f, D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f)},
+        {1.0f, 0.5f, 0.0f, D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f)},
+        {1.0f, 1.0f, 0.0f, D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f)}
+    };
+
+    VERTEX OurVertices2[] =
+    {
+        {-1.0f, 0.5f, 0.0f, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f)},
+        {-1.0f, 1.0f, 0.0f, D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f)},
+        {-0.5f, 0.5f, 0.0f, D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f)},
+        {-0.5f, 1.0f, 0.0f, D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f)}
+    };
+
+    VERTEX OurVertices3[] =
+    {
+        {0.5f, -1.0f, 0.0f, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f)},
+        {0.5f, -0.5f, 0.0f, D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f)},
+        {1.0f, -1.0f, 0.0f, D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f)},
+        {1.0f, -0.5f, 0.0f, D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f)}
+    };
+
+
+
+    
+        OurVertices[0].X = OurVertices[0].X + shiftX;
+        OurVertices[1].X = OurVertices[1].X + shiftX;
+        OurVertices[2].X = OurVertices[2].X + shiftX;
+        OurVertices[3].X = OurVertices[3].X + shiftX;

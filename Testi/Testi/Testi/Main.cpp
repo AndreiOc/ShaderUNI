@@ -1,6 +1,7 @@
 #include"Headers/DirectX.h"
 #include"Headers/Paddle.h"
 #include"Headers/Ball.h"
+#include"Headers/Block.h"
 
 // global declarations
 IDXGISwapChain* swapchain;              // the pointer to the swap chain interface
@@ -10,16 +11,14 @@ ID3D11RenderTargetView* backbuffer;     // the pointer to our back buffer
 ID3D11InputLayout* pLayout;             // the pointer to the input layout
 ID3D11VertexShader* pVS;                // the pointer to the vertex shader
 ID3D11PixelShader* pPS;                 // the pointer to the pixel shader
-ID3D11Buffer* pVBuffer[65];             // the pointer to the vertex buffer, this is for only and only the blocks
 
 float SHIFTINGX = 0.00f;
 float SHIFTINGBALL = 0.00f;
 float RED;
-VERTEX *BLOCKS[13 * 5]; //tecnicamente qua tengo dentro tutto 
 
 // function prototypes
 void InitD3D(HWND hWnd);    // sets up and initializes Direct3D
-void RenderFrame(Paddle paddle,Ball ball);     // renders a single frame
+void RenderFrame(Paddle paddle,Ball ball,Block block);     // renders a single frame
 void CleanD3D(Paddle paddle);        // closes Direct3D and releases memory
 void InitGraphics(void);    // creates the shape to render
 void InitPipeline(void);    // loads and prepares the shaders
@@ -67,12 +66,13 @@ int WINAPI WinMain(HINSTANCE hInstance,
     ShowWindow(hWnd, nCmdShow);
     Paddle paddle;
     Ball ball;
-
+    Block block;
     // set up and initialize Direct3D
     InitD3D(hWnd);
 
     // enter the main loop:
-    RED = paddle.Update(SHIFTINGX, dev, devcon);
+    block.Update(dev, devcon, 0.0f, 0.0f, 0.1f, 0.1f);
+    paddle.Update(SHIFTINGX, dev, devcon);
     ball.Update(dev, devcon,SHIFTINGX);
 
     MSG msg;
@@ -88,7 +88,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
         }
 
-        RenderFrame(paddle,ball);
+        RenderFrame(paddle,ball,block);
     }
 
     // clean up DirectX and COM
@@ -191,34 +191,15 @@ void InitD3D(HWND hWnd)
 
 
 // this is the function used to render a single frame
-void RenderFrame(Paddle paddle, Ball ball)
+void RenderFrame(Paddle paddle, Ball ball, Block block)
 {
     // clear the back buffer to a deep blue
     devcon->ClearRenderTargetView(backbuffer, D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
 
-    // select which vertex buffer to display
-    UINT stride = sizeof(VERTEX);
-    UINT offset = 0;
-    for (int i = 0; i < 65; i++)
-    {
-        devcon->IASetVertexBuffers(0, 1, &pVBuffer[i], &stride, &offset);
-
-        // select which primtive type we are using
-        devcon->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
-
-        // draw the vertex buffer to the back buffer
-        devcon->Draw(4, 0);
-    }
-
-
 
     ball.Update(dev, devcon, SHIFTINGBALL);
-
-
-
-
-
-    RED = paddle.Update(SHIFTINGX,dev,devcon);
+    paddle.Update(SHIFTINGX,dev,devcon);
+    block.Update(dev, devcon, 0.0f, 0.0f, 0.1f, 0.1f);
 
 
     // switch the back buffer and the front buffer
@@ -235,11 +216,6 @@ void CleanD3D(Paddle paddle)
     pLayout->Release();
     pVS->Release();
     pPS->Release();
-    for (int i = 0; i < 65; i++)
-    {
-        if(pVBuffer[i] != NULL)
-            pVBuffer[i]->Release();
-    }
     swapchain->Release();
     backbuffer->Release();
     dev->Release();
@@ -250,50 +226,7 @@ void CleanD3D(Paddle paddle)
 // this is the function that creates the shape to render
 void InitGraphics()
 {
-    // create a triangle using the VERTEX struct
-    // io so che questa struttura si suddivice in blocchi a di 3 mattonconi 
-    //
-    //
-    //
-    float shiftY = 0.00f;
-    float shiftX = 0.00f;
-    int counter = 0;
-    
 
-    for (int i = 0; i < 13; i++)
-    {
-        for (int j = 0; j < 5; j++)
-        {
-            VERTEX OurVertices[] =
-            {
-                {-1.0f + shiftX, 0.9f + shiftY, 0.0f, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f)},
-                {-1.0f + shiftX, 1.0f + shiftY, 0.0f, D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f)},
-                {-0.9f + shiftX, 0.9f + shiftY, 0.0f, D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f)},
-                {-0.9f + shiftX, 1.0f + shiftY, 0.0f, D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f)}
-            };
-
-            // create the vertex buffer
-            D3D11_BUFFER_DESC bd;
-            ZeroMemory(&bd, sizeof(bd));
-
-            bd.Usage = D3D11_USAGE_DYNAMIC;                // write access access by CPU and GPU
-            bd.ByteWidth = sizeof(VERTEX) * 4;             // size is the VERTEX struct * 3
-            bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;       // use as a vertex buffer
-            bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;    // allow CPU to write in buffer
-
-            dev->CreateBuffer(&bd, NULL, &pVBuffer[counter]);       // create the buffer
-            // copy the vertices into the buffer
-            D3D11_MAPPED_SUBRESOURCE ms;
-            devcon->Map(pVBuffer[counter], NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms);      // map the buffer
-            memcpy(ms.pData, OurVertices, sizeof(OurVertices));                                                         // copy the data
-            devcon->Unmap(pVBuffer[counter], NULL);                                                                   // unmap the buffer
-            shiftY -= 0.15f;
-            BLOCKS[counter] = OurVertices;
-            counter++;
-        }
-        shiftX += 0.15f;
-        shiftY = 0.;
-    }
 
 }
 

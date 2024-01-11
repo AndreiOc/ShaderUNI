@@ -26,7 +26,7 @@ VERTEX *Paddle::GetVertices()
     return OurVertices;
 }
 
-float Paddle::Update(float shiftX, ID3D11Device* dev, ID3D11DeviceContext* devcon)
+void Paddle::Update(float shiftX, ID3D11Device* dev, ID3D11DeviceContext* devcon)
 {
 
     OurVertices[0].X = OurVertices[0].X + shiftX;
@@ -60,7 +60,6 @@ float Paddle::Update(float shiftX, ID3D11Device* dev, ID3D11DeviceContext* devco
     // draw the vertex buffer to the back buffer
     devcon->Draw(4, 0);
 
-    return OurVertices[2].X;
 
 }
 

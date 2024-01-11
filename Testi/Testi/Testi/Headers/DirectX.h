@@ -17,6 +17,10 @@
 // define the screen resolution
 #define SCREEN_WIDTH  800
 #define SCREEN_HEIGHT 800
+const int BLOCKX = 13;
+const int BLOCKY = 5;
+
 
  struct VERTEX { FLOAT X, Y, Z; D3DXCOLOR Color; };
+
 

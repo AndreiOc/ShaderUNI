@@ -11,7 +11,7 @@ public:
 	/// <param name="shiftX"></param>
 	/// <param name="dev"></param>
 	/// <param name="devcon"></param>
-	float Update(float shiftX, ID3D11Device* dev, ID3D11DeviceContext* devcon);
+	void Update(float shiftX, ID3D11Device* dev, ID3D11DeviceContext* devcon);
 	
 	~Paddle();
 	/// <summary>

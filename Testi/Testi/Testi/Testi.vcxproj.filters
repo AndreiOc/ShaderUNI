@@ -24,12 +24,15 @@
     <ClCompile Include="Ball.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Block.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaders.hlsl" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="FileName.txt" />
+    <Text Include="Stuff\FileName.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Headers\Paddle.h">
@@ -39,6 +42,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Headers\Ball.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\Block.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -18,7 +18,7 @@ float RED;
 
 // function prototypes
 void InitD3D(HWND hWnd);    // sets up and initializes Direct3D
-void RenderFrame(Paddle paddle,Ball ball,Block block);     // renders a single frame
+void RenderFrame(Paddle paddle,Ball ball,Block blocks[]);     // renders a single frame
 void CleanD3D(Paddle paddle);        // closes Direct3D and releases memory
 void InitGraphics(void);    // creates the shape to render
 void InitPipeline(void);    // loads and prepares the shaders
@@ -66,12 +66,23 @@ int WINAPI WinMain(HINSTANCE hInstance,
     ShowWindow(hWnd, nCmdShow);
     Paddle paddle;
     Ball ball;
-    Block block;
+    ///array of block how block the ball, now a neeed to the define the move ball
+    Block *blocks = new Block[BLOCKX * BLOCKY];
+    int count = 0;
+    for (float i =  -6.0f; i < 7; i++)
+    {
+        for (float j = 0; j < 5; j++)
+        {
+            blocks[count] = Block(i/7.0f,j/5.0f);
+            count++;
+        }
+    }
+
+
     // set up and initialize Direct3D
     InitD3D(hWnd);
 
     // enter the main loop:
-    block.Update(dev, devcon, 0.0f, 0.0f, 0.1f, 0.1f);
     paddle.Update(SHIFTINGX, dev, devcon);
     ball.Update(dev, devcon,SHIFTINGX);
 
@@ -88,7 +99,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
         }
 
-        RenderFrame(paddle,ball,block);
+        RenderFrame(paddle,ball,blocks);
     }
 
     // clean up DirectX and COM
@@ -191,7 +202,7 @@ void InitD3D(HWND hWnd)
 
 
 // this is the function used to render a single frame
-void RenderFrame(Paddle paddle, Ball ball, Block block)
+void RenderFrame(Paddle paddle, Ball ball, Block blocks[])
 {
     // clear the back buffer to a deep blue
     devcon->ClearRenderTargetView(backbuffer, D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
@@ -199,8 +210,15 @@ void RenderFrame(Paddle paddle, Ball ball, Block block)
 
     ball.Update(dev, devcon, SHIFTINGBALL);
     paddle.Update(SHIFTINGX,dev,devcon);
-    block.Update(dev, devcon, 0.0f, 0.0f, 0.1f, 0.1f);
-
+    int count = 0;
+    for (int i = 0; i < BLOCKX; i++)
+    {
+        for (int j = 0; j < BLOCKY; j++)
+        {
+            blocks[count].Update(dev, devcon, 0.0f, 0.0f, 0.1f, 0.1f);
+            count++;
+        }
+    }
 
     // switch the back buffer and the front buffer
     swapchain->Present(0, 0);

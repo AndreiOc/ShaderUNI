@@ -4,7 +4,13 @@
 class Block
 {
 public:
+	/// <summary>
+	/// Pass the biggest correct value and after thath i update all the positions
+	/// </summary>
+	/// <param name="posX"></param>
+	/// <param name="posY"></param>
 	Block();
+	Block(float posX, float posY);
 	~Block();
 	void Update(ID3D11Device* dev, ID3D11DeviceContext* devcon, float ballX, float ballY,float posX, float posY);
 

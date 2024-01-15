@@ -2,11 +2,14 @@
 
 
 Block::Block()
+{}
+
+Block::Block(float posX, float posY)
 {
-    vertices[0] = { -1.0f + 0, 0.9f + 0, 0.0f, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f) };
-    vertices[1] = { -1.0f + 0, 1.0f + 0, 0.0f, D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f) };
-    vertices[2] = { -0.9f + 0, 0.9f + 0, 0.0f, D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f) };
-    vertices[3] = { -0.9f + 0, 1.0f + 0, 0.0f, D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f) };
+    vertices[0] = { posX,           posY - 0.1f,    0.0f, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f) };
+    vertices[1] = { posX,           posY + 0,       0.0f, D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f) };
+    vertices[2] = { posX + 0.1f,    posY - 0.1f,    0.0f, D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f) };
+    vertices[3] = { posX + 0.1f,    posY + 0,       0.0f, D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f) };
 
     pVBufferBlock = NULL;
 }

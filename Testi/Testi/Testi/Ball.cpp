@@ -1,19 +1,18 @@
 #include "Headers/Ball.h"
 Ball::Ball()
 {
-    OurVertices[0] = { -0.025f, -0.55f, 0.0f, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f)};
-    OurVertices[1] = { -0.025f, -0.5f, 0.0f, D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f) };
-    OurVertices[2] = { 0.025f, -0.55f, 0.0f, D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f) };
-    OurVertices[3] = { 0.025f , -0.5f, 0.0f, D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f) };
+    vertices[0] = { -0.025f, -0.55f, 0.0f, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f)};
+    vertices[1] = { -0.025f, -0.5f, 0.0f, D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f) };
+    vertices[2] = { 0.025f, -0.55f, 0.0f, D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f) };
+    vertices[3] = { 0.025f , -0.5f, 0.0f, D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f) };
 
     pVBufferBall = NULL;
 }
 
 
-void Ball::Update(ID3D11Device* dev, ID3D11DeviceContext* devcon, float shift)
+void Ball::Update(ID3D11Device* dev, ID3D11DeviceContext* devcon, float shiftX, float shiftY)
 {
-
-    Bounce(shift);
+    Bounce(shiftX, shiftY);
     UINT stride = sizeof(VERTEX);
     UINT offset = 0;
 
@@ -30,7 +29,7 @@ void Ball::Update(ID3D11Device* dev, ID3D11DeviceContext* devcon, float shift)
     // copy the vertices into the buffer
     D3D11_MAPPED_SUBRESOURCE ms;
     devcon->Map(pVBufferBall, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms);      // map the buffer
-    memcpy(ms.pData, OurVertices, sizeof(OurVertices));                                                         // copy the data
+    memcpy(ms.pData, vertices, sizeof(vertices));                                                         // copy the data
     devcon->Unmap(pVBufferBall, NULL);
 
     devcon->IASetVertexBuffers(0, 1, &pVBufferBall, &stride, &offset);
@@ -46,17 +45,28 @@ Ball::~Ball()
 {
 }
 
-void Ball::Bounce(float shift)
+float Ball::GetX()
+{
+    return vertices[0].X;
+}
+
+float Ball::GetY()
+{
+    return vertices[0].Y;
+}
+
+
+void Ball::Bounce(float moveX, float moveY)
 {
  
-    OurVertices[0].X = OurVertices[0].X + shift;
-    OurVertices[1].X = OurVertices[1].X + shift;
-    OurVertices[2].X = OurVertices[2].X + shift;
-    OurVertices[3].X = OurVertices[3].X + shift;
+    vertices[0].X = vertices[0].X + moveX;
+    vertices[1].X = vertices[1].X + moveX;
+    vertices[2].X = vertices[2].X + moveX;
+    vertices[3].X = vertices[3].X + moveX;
 
-    OurVertices[0].Y = OurVertices[0].Y + shift;
-    OurVertices[1].Y = OurVertices[1].Y + shift;
-    OurVertices[2].Y = OurVertices[2].Y + shift;
-    OurVertices[3].Y = OurVertices[3].Y + shift;
+    vertices[0].Y = vertices[0].Y + moveY;
+    vertices[1].Y = vertices[1].Y + moveY;
+    vertices[2].Y = vertices[2].Y + moveY;
+    vertices[3].Y = vertices[3].Y + moveY;
 
 }

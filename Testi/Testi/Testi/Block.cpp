@@ -7,9 +7,9 @@ Block::Block()
 Block::Block(float posX, float posY)
 {
     vertices[0] = { posX,           posY - 0.1f,    0.0f, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f) };
-    vertices[1] = { posX,           posY + 0,       0.0f, D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f) };
+    vertices[1] = { posX,           posY,           0.0f, D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f) };
     vertices[2] = { posX + 0.1f,    posY - 0.1f,    0.0f, D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f) };
-    vertices[3] = { posX + 0.1f,    posY + 0,       0.0f, D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f) };
+    vertices[3] = { posX + 0.1f,    posY,           0.0f, D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f) };
 
     pVBufferBlock = NULL;
 }
@@ -20,6 +20,16 @@ Block::~Block()
 
 void Block::Update(ID3D11Device* dev, ID3D11DeviceContext* devcon, float ballX, float ballY,float posX,float posY)
 {
+
+    if (ballX > vertices[1].X &&
+        ballX < vertices[1].X + 0.1f &&
+        ballY < vertices[1].Y &&
+        ballY > vertices[1].Y - 0.1f
+        )
+    {
+        isHit = true;
+    }
+
     
     if (!isHit)
     {

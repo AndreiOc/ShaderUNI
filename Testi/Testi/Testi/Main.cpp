@@ -13,7 +13,12 @@ ID3D11VertexShader* pVS;                // the pointer to the vertex shader
 ID3D11PixelShader* pPS;                 // the pointer to the pixel shader
 
 float SHIFTINGX = 0.00f;
-float SHIFTINGBALL = 0.00f;
+float SHIFTINGBALLX = 0.00f;
+float SHIFTINGBALLY = 0.00f;
+
+float flagX= 1.0f;
+float flagY = 1.0f;
+
 float RED;
 
 // function prototypes
@@ -82,10 +87,6 @@ int WINAPI WinMain(HINSTANCE hInstance,
     // set up and initialize Direct3D
     InitD3D(hWnd);
 
-    // enter the main loop:
-    paddle.Update(SHIFTINGX, dev, devcon);
-    ball.Update(dev, devcon,SHIFTINGX);
-
     MSG msg;
     while (TRUE)
     {
@@ -98,6 +99,8 @@ int WINAPI WinMain(HINSTANCE hInstance,
                 break;
 
         }
+        SHIFTINGBALLX += 0.0005f * flagX;
+        SHIFTINGBALLY += 0.0005f * flagY;
 
         RenderFrame(paddle,ball,blocks);
     }
@@ -207,15 +210,28 @@ void RenderFrame(Paddle paddle, Ball ball, Block blocks[])
     // clear the back buffer to a deep blue
     devcon->ClearRenderTargetView(backbuffer, D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
 
+    if (SHIFTINGBALLX + ball.GetX() > 1.0f)
+        flagX = flagX * -1;
+    if (SHIFTINGBALLX + ball.GetX() < - 1.0f)
+        flagX = flagX * -1;
 
-    ball.Update(dev, devcon, SHIFTINGBALL);
+
+    if (SHIFTINGBALLY + ball.GetY() > 1.0f)
+        flagY = flagY * -1;
+    if (SHIFTINGBALLY + ball.GetY() < -1.0f)
+        flagY = flagY * -1;
+
+
+    ball.Update(dev, devcon, SHIFTINGBALLX, SHIFTINGBALLY);
+
     paddle.Update(SHIFTINGX,dev,devcon);
+    
     int count = 0;
     for (int i = 0; i < BLOCKX; i++)
     {
         for (int j = 0; j < BLOCKY; j++)
         {
-            blocks[count].Update(dev, devcon, 0.0f, 0.0f, 0.1f, 0.1f);
+            blocks[count].Update(dev, devcon, ball.GetX(), ball.GetY(), 0.1f, 0.1f);
             count++;
         }
     }

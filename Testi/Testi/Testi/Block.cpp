@@ -18,7 +18,7 @@ Block::~Block()
 {
 }
 
-void Block::Update(ID3D11Device* dev, ID3D11DeviceContext* devcon, float ballX, float ballY,float posX,float posY)
+bool Block::Update(ID3D11Device* dev, ID3D11DeviceContext* devcon, float ballX, float ballY,float posX,float posY)
 {
 
     if (ballX > vertices[1].X &&
@@ -28,6 +28,7 @@ void Block::Update(ID3D11Device* dev, ID3D11DeviceContext* devcon, float ballX, 
         )
     {
         isHit = true;
+        return true;
     }
 
     
@@ -58,18 +59,24 @@ void Block::Update(ID3D11Device* dev, ID3D11DeviceContext* devcon, float ballX, 
 
         // draw the vertex buffer to the back buffer
         devcon->Draw(4, 0);
+        return false;
     }
 
 }
 
 
-void Block::isBallHit(float ballX, float ballY)
+bool Block::isBallHit(float ballX, float ballY)
 {
-    if (true)
+    if (ballX > vertices[1].X &&
+        ballX < vertices[1].X + 0.1f &&
+        ballY < vertices[1].Y &&
+        ballY > vertices[1].Y - 0.1f)
     {
-        //se la posizone della pallina è compresa tra 
-        //i valore della posizione del blocco allora è stata colpita altrimenti no
-        //devo fare un check dell'intorno
+        return true;
+    }
+    else
+    {
+        return false;
     }
 
 }

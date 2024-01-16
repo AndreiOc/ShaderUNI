@@ -128,12 +128,12 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
             if (wParam == VK_LEFT)
             {
                 if (SHIFTINGX >= -0.8f)
-                   SHIFTINGX -= 0.02f;
+                   SHIFTINGX -= 0.03f;
             }
             if (wParam == VK_RIGHT)
             {
                 if (SHIFTINGX <= 0.8f)
-                    SHIFTINGX += 0.02f;
+                    SHIFTINGX += 0.03f;
             }
         }
     }
@@ -207,34 +207,45 @@ void InitD3D(HWND hWnd)
 // this is the function used to render a single frame
 void RenderFrame(Paddle paddle, Ball ball, Block blocks[])
 {
-    // clear the back buffer to a deep blue
+    //Make all the update for the funtions
+    //clear the back buffer to a deep blue
     devcon->ClearRenderTargetView(backbuffer, D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
 
-    if (SHIFTINGBALLX + ball.GetX() > 1.0f)
-        flagX = flagX * -1;
-    if (SHIFTINGBALLX + ball.GetX() < - 1.0f)
-        flagX = flagX * -1;
-
-
-    if (SHIFTINGBALLY + ball.GetY() > 1.0f)
-        flagY = flagY * -1;
-    if (SHIFTINGBALLY + ball.GetY() < -1.0f)
-        flagY = flagY * -1;
-
-
+    //here if only i tocuh the border so technicali no problem
     ball.Update(dev, devcon, SHIFTINGBALLX, SHIFTINGBALLY);
 
-    paddle.Update(SHIFTINGX,dev,devcon);
-    
+    bool paddleHit = paddle.Update(SHIFTINGX,dev,devcon, ball.GetX(), ball.GetY());
+    if (paddleHit)
+    {
+        flagY = flagY * -1;//invert the y 
+    }
+  
     int count = 0;
+   
     for (int i = 0; i < BLOCKX; i++)
     {
         for (int j = 0; j < BLOCKY; j++)
         {
-            blocks[count].Update(dev, devcon, ball.GetX(), ball.GetY(), 0.1f, 0.1f);
+            bool hit = blocks[count].Update(dev, devcon, ball.GetX(), ball.GetY(), 0.1f, 0.1f);
+            if (hit)
+            {
+                flagY = flagY * -1;
+                //flagX = flagX * -1;
+
+            }
             count++;
         }
     }
+ 
+    //if it ball hit the bar cameback
+    if (SHIFTINGBALLX + ball.GetX() > 1.0f)
+        flagX = flagX * -1; //invert the X 
+    if (SHIFTINGBALLX + ball.GetX() < -1.0f)
+        flagX = flagX * -1;//invert the x 
+    if (SHIFTINGBALLY + ball.GetY() > 1.0f)
+        flagY = flagY * -1;//invert the y 
+    if (SHIFTINGBALLY + ball.GetY() < -1.0f)
+        flagY = flagY * -1;//invert the y 
 
     // switch the back buffer and the front buffer
     swapchain->Present(0, 0);

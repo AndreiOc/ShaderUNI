@@ -12,10 +12,9 @@ public:
 	Block();
 	Block(float posX, float posY);
 	~Block();
-	void Update(ID3D11Device* dev, ID3D11DeviceContext* devcon, float ballX, float ballY,float posX, float posY);
-
+	bool Update(ID3D11Device* dev, ID3D11DeviceContext* devcon, float ballX, float ballY,float posX, float posY);
+	bool isBallHit(float ballX, float ballY);
 private:
-	void isBallHit(float ballX, float ballY);
 
 	ID3D11Buffer* pVBufferBlock; // the pointer to the vertex buffer, this is for only and only the blocks
 	VERTEX vertices[4];

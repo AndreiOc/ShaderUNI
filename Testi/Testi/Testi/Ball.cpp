@@ -9,7 +9,9 @@ Ball::Ball()
     pVBufferBall = NULL;
 }
 
-
+Ball::~Ball()
+{
+}
 void Ball::Update(ID3D11Device* dev, ID3D11DeviceContext* devcon, float shiftX, float shiftY)
 {
     Bounce(shiftX, shiftY);
@@ -41,9 +43,7 @@ void Ball::Update(ID3D11Device* dev, ID3D11DeviceContext* devcon, float shiftX, 
     devcon->Draw(4, 0);
 }
 
-Ball::~Ball()
-{
-}
+
 
 float Ball::GetX()
 {
@@ -70,3 +70,6 @@ void Ball::Bounce(float moveX, float moveY)
     vertices[3].Y = vertices[3].Y + moveY;
 
 }
+
+
+

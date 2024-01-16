@@ -5,10 +5,10 @@
 /// </summary>
 Paddle::Paddle()
 {
-    OurVertices[0] = { -0.2f, -0.9f, 0.0f, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f) };
-    OurVertices[1] = { -0.2f, -0.8f, 0.0f, D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f) };
-    OurVertices[2] = { 0.2f, -0.9f, 0.0f, D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f) };
-    OurVertices[3] = { 0.2f , -0.8f, 0.0f, D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f) };
+    vertices[0] = { -0.2f, -0.9f, 0.0f, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f) };
+    vertices[1] = { -0.2f, -0.8f, 0.0f, D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f) };
+    vertices[2] = { 0.2f, -0.9f, 0.0f, D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f) };
+    vertices[3] = { 0.2f , -0.8f, 0.0f, D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f) };
 
     pVBufferPaddle = NULL;
 }
@@ -23,16 +23,16 @@ ID3D11Buffer* Paddle::GetBuffer()
 
 VERTEX *Paddle::GetVertices()
 {
-    return OurVertices;
+    return vertices;
 }
 
-void Paddle::Update(float shiftX, ID3D11Device* dev, ID3D11DeviceContext* devcon)
+bool Paddle::Update(float shiftX, ID3D11Device* dev, ID3D11DeviceContext* devcon, float ballX, float ballY)
 {
 
-    OurVertices[0].X = OurVertices[0].X + shiftX;
-    OurVertices[1].X = OurVertices[1].X + shiftX;
-    OurVertices[2].X = OurVertices[2].X + shiftX;
-    OurVertices[3].X = OurVertices[3].X + shiftX;
+    vertices[0].X = vertices[0].X + shiftX;
+    vertices[1].X = vertices[1].X + shiftX;
+    vertices[2].X = vertices[2].X + shiftX;
+    vertices[3].X = vertices[3].X + shiftX;
         
     UINT stride = sizeof(VERTEX);
     UINT offset = 0;
@@ -49,7 +49,7 @@ void Paddle::Update(float shiftX, ID3D11Device* dev, ID3D11DeviceContext* devcon
     // copy the vertices into the buffer
     D3D11_MAPPED_SUBRESOURCE ms;
     devcon->Map(pVBufferPaddle, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms);      // map the buffer
-    memcpy(ms.pData, OurVertices, sizeof(OurVertices));                                                         // copy the data
+    memcpy(ms.pData, vertices, sizeof(vertices));                                                         // copy the data
     devcon->Unmap(pVBufferPaddle, NULL);
 
     devcon->IASetVertexBuffers(0, 1, &pVBufferPaddle, &stride, &offset);
@@ -59,6 +59,20 @@ void Paddle::Update(float shiftX, ID3D11Device* dev, ID3D11DeviceContext* devcon
 
     // draw the vertex buffer to the back buffer
     devcon->Draw(4, 0);
+
+    //if it is between the x of the paddle and it is lower the the y bounce
+    if (ballX > vertices[1].X  &&
+        ballX < vertices[1].X + 0.4f &&
+        ballY < vertices[1].Y &&
+        ballY > vertices[1].Y - 0.1f
+        )
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 
 
 }

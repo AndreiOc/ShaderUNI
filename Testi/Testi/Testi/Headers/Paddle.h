@@ -11,7 +11,7 @@ public:
 	/// <param name="shiftX"></param>
 	/// <param name="dev"></param>
 	/// <param name="devcon"></param>
-	void Update(float shiftX, ID3D11Device* dev, ID3D11DeviceContext* devcon);
+	bool Update(float shiftX, ID3D11Device* dev, ID3D11DeviceContext* devcon, float ballX, float ballY);
 	
 	~Paddle();
 	/// <summary>
@@ -26,7 +26,7 @@ private:
     /// <summary>
     /// My paddle verrtices
     /// </summary>
-	VERTEX OurVertices[4];
+	VERTEX vertices[4];
 	bool go = true;
 };
 

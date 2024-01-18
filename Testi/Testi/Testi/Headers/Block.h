@@ -14,6 +14,7 @@ public:
 	~Block();
 	bool Update(ID3D11Device* dev, ID3D11DeviceContext* devcon, float ballX, float ballY);
 	bool isBallHit(float ballX, float ballY);
+	bool GetHit();
 private:
 
 	ID3D11Buffer* pVBufferBlock; // the pointer to the vertex buffer, this is for only and only the blocks

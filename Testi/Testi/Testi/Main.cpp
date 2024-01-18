@@ -236,11 +236,16 @@ void RenderFrame(Paddle paddle, Ball ball, Block blocks[])
     {
         for (int j = 0; j < BLOCKY; j++)
         {
+            //if(blocks[count].isBallHit(VALBALLX, VALBALLY))
             if (blocks[count].Update(dev, devcon, VALBALLX, VALBALLY) )
             {
                 flagY = flagY * -1;
                 flagX = flagX * -1;
                 RED = 0.0f;
+            }
+            else
+            {
+                RED = 1.0f;
             }
             count++;
         }

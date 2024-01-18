@@ -1,6 +1,5 @@
 #include"Headers/Block.h"
 
-
 Block::Block()
 {}
 
@@ -24,7 +23,7 @@ bool Block::Update(ID3D11Device* dev, ID3D11DeviceContext* devcon, float ballX, 
         ballX < vertices[1].X + 0.1f &&
         ballY < vertices[1].Y &&
         ballY > vertices[1].Y - 0.1f
-        )
+       && !isHit )
     {
         isHit = true;
     }
@@ -67,7 +66,8 @@ bool Block::isBallHit(float ballX, float ballY)
     if (ballX > vertices[1].X &&
         ballX < vertices[1].X + 0.1f &&
         ballY < vertices[1].Y &&
-        ballY > vertices[1].Y - 0.1f)
+        ballY > vertices[1].Y - 0.1f
+        )
     {
         return true;
     }
@@ -76,4 +76,10 @@ bool Block::isBallHit(float ballX, float ballY)
         return false;
     }
 
+}
+
+
+bool Block::GetHit()
+{
+    return isHit;
 }

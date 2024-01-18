@@ -61,10 +61,10 @@ bool Paddle::Update(float shiftX, ID3D11Device* dev, ID3D11DeviceContext* devcon
     devcon->Draw(4, 0);
 
     //if it is between the x of the paddle and it is lower the the y bounce
-    if (ballX > vertices[1].X  &&
-        ballX < vertices[1].X + 0.4f &&
-        ballY < vertices[1].Y &&
-        ballY > vertices[1].Y - 0.1f
+    if (ballX > vertices[1].X + shiftX &&
+        ballX < vertices[1].X + 0.4f + shiftX &&
+        ballY > vertices[1].Y &&
+        ballY < vertices[1].Y - 0.1f
         )
     {
         return true;
@@ -73,7 +73,13 @@ bool Paddle::Update(float shiftX, ID3D11Device* dev, ID3D11DeviceContext* devcon
     {
         return false;
     }
-
-
 }
 
+float Paddle::GetX()
+{
+    return vertices[1].X;
+}
+float Paddle::GetY()
+{
+    return vertices[1].Y;
+}

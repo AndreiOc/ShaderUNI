@@ -139,6 +139,5 @@ C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\d3d10.h(609,1):
   C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\winerror.h(58155,1):
   see previous definition of 'D3D10_ERROR_FILE_NOT_FOUND'
   
-C:\Users\Andrei Ocneanu\Desktop\MasterGameDev\ShaderUNI\Testi\Testi\Testi\Main.cpp(112,15): warning C4244: 'return': conversion from 'WPARAM' to 'int', possible loss of data
-C:\Users\Andrei Ocneanu\Desktop\MasterGameDev\ShaderUNI\Testi\Testi\Testi\Main.cpp(237,29): warning C4305: '-=': truncation from 'double' to 'float'
+C:\Users\Andrei Ocneanu\Desktop\MasterGameDev\ShaderUNI\Testi\Testi\Testi\Main.cpp(120,15): warning C4244: 'return': conversion from 'WPARAM' to 'int', possible loss of data
   Testi.vcxproj -> C:\Users\Andrei Ocneanu\Desktop\MasterGameDev\ShaderUNI\Testi\Testi\x64\Debug\Testi.exe

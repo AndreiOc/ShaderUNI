@@ -16,12 +16,20 @@ float SHIFTINGX = 0.0f;
 float SHIFTINGBALLX = 0.00f;
 float SHIFTINGBALLY = 0.00f;
 
+float VALBALLX;
+float VALBALLY;
+
+float VALPADDLEX;
+float VALPADDLEY;
+
+
+
 float flagX= 1.0f;
 float flagY = 1.0f;
 
 float RED = 1.0f;
 
-// function prototypes
+// function prototypes 
 void InitD3D(HWND hWnd);    // sets up and initializes Direct3D
 void RenderFrame(Paddle paddle,Ball ball,Block blocks[]);     // renders a single frame
 void CleanD3D(Paddle paddle);        // closes Direct3D and releases memory
@@ -212,7 +220,11 @@ void RenderFrame(Paddle paddle, Ball ball, Block blocks[])
     //clear the back buffer to a deep blue
     devcon->ClearRenderTargetView(backbuffer, D3DXCOLOR(RED, 0.0f, 0.0f, 1.0f));
 
-    bool paddleHit = paddle.Update(SHIFTINGX,dev,devcon, ball.GetX(), ball.GetY());
+    VALBALLX = ball.GetX() + SHIFTINGBALLX;
+    VALBALLY = ball.GetY() + SHIFTINGBALLY;
+    VALPADDLEX = paddle.GetX() + SHIFTINGX;
+
+    bool paddleHit = paddle.Update(SHIFTINGX,dev,devcon, VALBALLX, VALBALLY);
     if (paddleHit)
     {
         flagY = flagY * -1;//invert the y 
@@ -224,15 +236,11 @@ void RenderFrame(Paddle paddle, Ball ball, Block blocks[])
     {
         for (int j = 0; j < BLOCKY; j++)
         {
-            if (blocks[count].Update(dev, devcon, ball.GetX(), ball.GetY()))
+            if (blocks[count].Update(dev, devcon, VALBALLX, VALBALLY) )
             {
                 flagY = flagY * -1;
                 flagX = flagX * -1;
-                RED += 0.001f;
-            }
-            else
-            {
-                RED -= 0.001;
+                RED = 0.0f;
             }
             count++;
         }

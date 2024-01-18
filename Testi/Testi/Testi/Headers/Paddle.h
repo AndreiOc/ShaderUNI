@@ -20,6 +20,10 @@ public:
 	/// <returns></returns>
 	ID3D11Buffer* GetBuffer();
 	VERTEX *GetVertices();
+
+	float GetX();
+	float GetY();
+
 private:
 	ID3D11Buffer* pVBufferPaddle;           // the poitner to the vertex buffer for the paddle
 

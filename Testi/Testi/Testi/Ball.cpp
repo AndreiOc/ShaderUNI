@@ -47,12 +47,12 @@ void Ball::Update(ID3D11Device* dev, ID3D11DeviceContext* devcon, float shiftX, 
 
 float Ball::GetX()
 {
-    return vertices[0].X;
+    return vertices[1].X;
 }
 
 float Ball::GetY()
 {
-    return vertices[0].Y;
+    return vertices[1].Y;
 }
 
 

@@ -12,20 +12,20 @@ ID3D11InputLayout* pLayout;             // the pointer to the input layout
 ID3D11VertexShader* pVS;                // the pointer to the vertex shader
 ID3D11PixelShader* pPS;                 // the pointer to the pixel shader
 
-float SHIFTINGX = 0.00f;
+float SHIFTINGX = 0.0f;
 float SHIFTINGBALLX = 0.00f;
 float SHIFTINGBALLY = 0.00f;
 
 float flagX= 1.0f;
 float flagY = 1.0f;
 
-float RED;
+float RED = 1.0f;
 
 // function prototypes
 void InitD3D(HWND hWnd);    // sets up and initializes Direct3D
 void RenderFrame(Paddle paddle,Ball ball,Block blocks[]);     // renders a single frame
 void CleanD3D(Paddle paddle);        // closes Direct3D and releases memory
-void InitGraphics(void);    // creates the shape to render
+//void InitGraphics(void);    // creates the shape to render
 void InitPipeline(void);    // loads and prepares the shaders
 
 // the WindowProc function prototype
@@ -73,6 +73,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
     Ball ball;
     ///array of block how block the ball, now a neeed to the define the move ball
     Block *blocks = new Block[BLOCKX * BLOCKY];
+
     int count = 0;
     for (float i =  -6.0f; i < 7; i++)
     {
@@ -200,7 +201,7 @@ void InitD3D(HWND hWnd)
     devcon->RSSetViewports(1, &viewport);
 
     InitPipeline();
-    InitGraphics();
+    
 }
 
 
@@ -209,10 +210,7 @@ void RenderFrame(Paddle paddle, Ball ball, Block blocks[])
 {
     //Make all the update for the funtions
     //clear the back buffer to a deep blue
-    devcon->ClearRenderTargetView(backbuffer, D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
-
-    //here if only i tocuh the border so technicali no problem
-    ball.Update(dev, devcon, SHIFTINGBALLX, SHIFTINGBALLY);
+    devcon->ClearRenderTargetView(backbuffer, D3DXCOLOR(RED, 0.0f, 0.0f, 1.0f));
 
     bool paddleHit = paddle.Update(SHIFTINGX,dev,devcon, ball.GetX(), ball.GetY());
     if (paddleHit)
@@ -226,12 +224,15 @@ void RenderFrame(Paddle paddle, Ball ball, Block blocks[])
     {
         for (int j = 0; j < BLOCKY; j++)
         {
-            bool hit = blocks[count].Update(dev, devcon, ball.GetX(), ball.GetY(), 0.1f, 0.1f);
-            if (hit)
+            if (blocks[count].Update(dev, devcon, ball.GetX(), ball.GetY()))
             {
                 flagY = flagY * -1;
-                //flagX = flagX * -1;
-
+                flagX = flagX * -1;
+                RED += 0.001f;
+            }
+            else
+            {
+                RED -= 0.001;
             }
             count++;
         }
@@ -246,6 +247,9 @@ void RenderFrame(Paddle paddle, Ball ball, Block blocks[])
         flagY = flagY * -1;//invert the y 
     if (SHIFTINGBALLY + ball.GetY() < -1.0f)
         flagY = flagY * -1;//invert the y 
+
+    //here if only i tocuh the border so technicali no problem
+    ball.Update(dev, devcon, SHIFTINGBALLX, SHIFTINGBALLY);
 
     // switch the back buffer and the front buffer
     swapchain->Present(0, 0);
@@ -267,13 +271,6 @@ void CleanD3D(Paddle paddle)
     devcon->Release();
 }
 
-
-// this is the function that creates the shape to render
-void InitGraphics()
-{
-
-
-}
 
 
 // this function loads and prepares the shaders

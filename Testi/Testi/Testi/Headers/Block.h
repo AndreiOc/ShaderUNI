@@ -12,7 +12,7 @@ public:
 	Block();
 	Block(float posX, float posY);
 	~Block();
-	bool Update(ID3D11Device* dev, ID3D11DeviceContext* devcon, float ballX, float ballY,float posX, float posY);
+	bool Update(ID3D11Device* dev, ID3D11DeviceContext* devcon, float ballX, float ballY);
 	bool isBallHit(float ballX, float ballY);
 private:
 

@@ -18,17 +18,17 @@ Block::~Block()
 {
 }
 
-bool Block::Update(ID3D11Device* dev, ID3D11DeviceContext* devcon, float ballX, float ballY,float posX,float posY)
+bool Block::Update(ID3D11Device* dev, ID3D11DeviceContext* devcon, float ballX, float ballY)
 {
+    
 
-    if (ballX > vertices[1].X &&
-        ballX < vertices[1].X + 0.1f &&
-        ballY < vertices[1].Y &&
-        ballY > vertices[1].Y - 0.1f
+    if (ballX >= vertices[1].X &&
+        ballX <= vertices[1].X + 0.1f &&
+        ballY <= vertices[1].Y &&
+        ballY >= vertices[1].Y - 0.1f
         )
     {
         isHit = true;
-        return true;
     }
 
     
@@ -59,9 +59,8 @@ bool Block::Update(ID3D11Device* dev, ID3D11DeviceContext* devcon, float ballX, 
 
         // draw the vertex buffer to the back buffer
         devcon->Draw(4, 0);
-        return false;
     }
-
+    return isHit;
 }
 
 

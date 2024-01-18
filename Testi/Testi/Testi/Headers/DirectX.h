@@ -15,8 +15,8 @@
 
 
 // define the screen resolution
-#define SCREEN_WIDTH  800
-#define SCREEN_HEIGHT 800
+#define SCREEN_WIDTH  600	
+#define SCREEN_HEIGHT 600
 const int BLOCKX = 13;
 const int BLOCKY = 5;
 

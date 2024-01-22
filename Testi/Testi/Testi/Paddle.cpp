@@ -5,10 +5,10 @@
 /// </summary>
 Paddle::Paddle()
 {
-    vertices[0] = { -0.2f, -0.9f, 0.0f, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f) };
-    vertices[1] = { -0.2f, -0.8f, 0.0f, D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f) };
-    vertices[2] = { 0.2f, -0.9f, 0.0f, D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f) };
-    vertices[3] = { 0.2f , -0.8f, 0.0f, D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f) };
+    vertices[0] = { -0.2f, -0.9f, 0.0f, D3DXCOLOR(0.39215686274509803f, 0.43529411764705883f, 0.34509803921568627f, 1.0f) };
+    vertices[1] = { -0.2f, -0.8f, 0.0f, D3DXCOLOR(0.39215686274509803f, 0.43529411764705883f, 0.34509803921568627f, 1.0f) };
+    vertices[2] = { 0.2f, -0.9f, 0.0f,  D3DXCOLOR(0.39215686274509803f,  0.43529411764705883f, 0.34509803921568627f, 1.0f) };
+    vertices[3] = { 0.2f , -0.8f, 0.0f, D3DXCOLOR(0.39215686274509803f, 0.43529411764705883f, 0.34509803921568627f, 1.0f) };
 
     pVBufferPaddle = NULL;
 }
@@ -28,7 +28,6 @@ VERTEX *Paddle::GetVertices()
 
 bool Paddle::Update(float shiftX, ID3D11Device* dev, ID3D11DeviceContext* devcon, float ballX, float ballY)
 {
-
     vertices[0].X = vertices[0].X + shiftX;
     vertices[1].X = vertices[1].X + shiftX;
     vertices[2].X = vertices[2].X + shiftX;
@@ -63,8 +62,8 @@ bool Paddle::Update(float shiftX, ID3D11Device* dev, ID3D11DeviceContext* devcon
     //if it is between the x of the paddle and it is lower the the y bounce
     if (ballX > vertices[1].X + shiftX &&
         ballX < vertices[1].X + 0.4f + shiftX &&
-        ballY > vertices[1].Y &&
-        ballY < vertices[1].Y - 0.1f
+        ballY < vertices[1].Y &&
+        ballY > vertices[1].Y - 0.1f
         )
     {
         return true;

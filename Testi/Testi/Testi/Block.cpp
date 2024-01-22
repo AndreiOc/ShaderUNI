@@ -5,10 +5,15 @@ Block::Block()
 
 Block::Block(float posX, float posY)
 {
-    vertices[0] = { posX,           posY - 0.1f,    0.0f, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f) };
-    vertices[1] = { posX,           posY,           0.0f, D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f) };
-    vertices[2] = { posX + 0.1f,    posY - 0.1f,    0.0f, D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f) };
-    vertices[3] = { posX + 0.1f,    posY,           0.0f, D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f) };
+    float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+    float g = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+    float b = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+
+
+    vertices[0] = { posX,           posY - 0.1f,    0.0f, D3DXCOLOR(r, g, b, 1.0f) };
+    vertices[1] = { posX,           posY,           0.0f, D3DXCOLOR(r, g, b, 1.0f) };
+    vertices[2] = { posX + 0.1f,    posY - 0.1f,    0.0f, D3DXCOLOR(r, g, b, 1.0f) };
+    vertices[3] = { posX + 0.1f,    posY,           0.0f, D3DXCOLOR(r, g, b, 1.0f) };
 
     pVBufferBlock = NULL;
 }

@@ -137,12 +137,12 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
             if (wParam == VK_LEFT)
             {
                 if (SHIFTINGX >= -0.8f)
-                   SHIFTINGX -= 0.03f;
+                   SHIFTINGX -= 0.1f;
             }
             if (wParam == VK_RIGHT)
             {
                 if (SHIFTINGX <= 0.8f)
-                    SHIFTINGX += 0.03f;
+                    SHIFTINGX += 0.1f;
             }
         }
     }
@@ -218,7 +218,7 @@ void RenderFrame(Paddle paddle, Ball ball, Block blocks[])
 {
     //Make all the update for the funtions
     //clear the back buffer to a deep blue
-    devcon->ClearRenderTargetView(backbuffer, D3DXCOLOR(RED, 0.0f, 0.0f, 1.0f));
+    devcon->ClearRenderTargetView(backbuffer, D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
 
     VALBALLX = ball.GetX() + SHIFTINGBALLX;
     VALBALLY = ball.GetY() + SHIFTINGBALLY;
@@ -240,26 +240,29 @@ void RenderFrame(Paddle paddle, Ball ball, Block blocks[])
             if (blocks[count].Update(dev, devcon, VALBALLX, VALBALLY) )
             {
                 flagY = flagY * -1;
-                flagX = flagX * -1;
-                RED = 0.0f;
             }
-            else
-            {
-                RED = 1.0f;
-            }
+
             count++;
         }
     }
  
     //if it ball hit the bar cameback
     if (SHIFTINGBALLX + ball.GetX() > 1.0f)
+    {
         flagX = flagX * -1; //invert the X 
+    }
     if (SHIFTINGBALLX + ball.GetX() < -1.0f)
+    {
         flagX = flagX * -1;//invert the x 
+    }
     if (SHIFTINGBALLY + ball.GetY() > 1.0f)
+    {
         flagY = flagY * -1;//invert the y 
+    }
     if (SHIFTINGBALLY + ball.GetY() < -1.0f)
+    {
         flagY = flagY * -1;//invert the y 
+    }
 
     //here if only i tocuh the border so technicali no problem
     ball.Update(dev, devcon, SHIFTINGBALLX, SHIFTINGBALLY);

@@ -4,21 +4,18 @@
 class Block
 {
 public:
-	/// <summary>
-	/// Pass the biggest correct value and after thath i update all the positions
-	/// </summary>
-	/// <param name="posX"></param>
-	/// <param name="posY"></param>
 	Block();
 	Block(ID3D11Device* dev,float posX, float posY);
 	~Block();
 
+	//update thge block and check if it is hit by the ball
 	bool Update( ID3D11DeviceContext* devcon, float ballX, float ballY);
 	bool isBallHit(float ballX, float ballY);
 	bool GetHit();
 
 private:
-	ID3D11Buffer* pVBufferBlock; // the pointer to the vertex buffer, this is for only and only the blocks
+	// the pointer to the vertex buffer, this is for only and only the blocks
+	ID3D11Buffer* pVBufferBlock; 
 	VERTEX vertices[4];
 	bool isHit = false;
 };

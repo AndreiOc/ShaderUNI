@@ -1,8 +1,5 @@
 #include "Headers/Paddle.h"
 
-/// <summary>
-/// Construt first initialization of the vertices
-/// </summary>
 Paddle::Paddle(ID3D11Device* dev)
 {
     vertices[0] = { -0.2f, -0.9f, 0.0f, D3DXCOLOR(0.39215686274509803f, 0.43529411764705883f, 0.34509803921568627f, 1.0f) };
@@ -25,16 +22,6 @@ Paddle::Paddle(ID3D11Device* dev)
 
 Paddle::~Paddle()
 {}
-
-ID3D11Buffer* Paddle::GetBuffer()
-{
-    return pVBufferPaddle;
-}
-
-VERTEX *Paddle::GetVertices()
-{
-    return vertices;
-}
 
 bool Paddle::Update(float shiftX, ID3D11DeviceContext* devcon, float ballX, float ballY)
 {

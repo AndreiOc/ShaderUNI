@@ -5,22 +5,12 @@ class Paddle
 {
 public:
 	Paddle(ID3D11Device* dev);
-	/// <summary>
-	/// I update the paddle so i can move it passing all the buffers and the shiftX for the moving 
-	/// </summary>
-	/// <param name="shiftX"></param>
-	/// <param name="dev"></param>
-	/// <param name="devcon"></param>
-	bool Update(float shiftX, ID3D11DeviceContext* devcon, float ballX, float ballY);
-	
 	~Paddle();
-	/// <summary>
-	/// I get the buffer from the paddle  
-	/// </summary>
-	/// <returns></returns>
-	ID3D11Buffer* GetBuffer();
-	VERTEX *GetVertices();
 
+	//update the paddle and the position 
+	bool Update(float shiftX, ID3D11DeviceContext* devcon, float ballX, float ballY);
+
+	//return the X and the Y value of the leftup corner
 	float GetX();
 	float GetY();
 

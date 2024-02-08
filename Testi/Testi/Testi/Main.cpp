@@ -16,9 +16,6 @@ float SHIFTINGX = 0.0f;
 float SHIFTINGBALLX = 0.00f;
 float SHIFTINGBALLY = 0.00f;
 
-float VALBALLX;
-float VALBALLY;
-
 float VALPADDLEX;
 float VALPADDLEY;
 
@@ -73,12 +70,8 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
     ShowWindow(hWnd, nCmdShow);
     
-
-
-
     // set up and initialize Direct3D
     InitD3D(hWnd);
-
 
     Paddle paddle(dev);
     Ball ball(dev);
@@ -220,8 +213,8 @@ void RenderFrame(Paddle paddle, Ball ball, Block blocks[])
     //clear the back buffer to a deep blue
     devcon->ClearRenderTargetView(backbuffer, D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
 
-    VALBALLX = ball.GetX() + SHIFTINGBALLX;
-    VALBALLY = ball.GetY() + SHIFTINGBALLY;
+    float VALBALLX = ball.GetX() + SHIFTINGBALLX;
+    float VALBALLY = ball.GetY() + SHIFTINGBALLY;
     VALPADDLEX = paddle.GetX() + SHIFTINGX;
 
    bool paddleHit = paddle.Update(SHIFTINGX,devcon, VALBALLX, VALBALLY);
@@ -236,7 +229,6 @@ void RenderFrame(Paddle paddle, Ball ball, Block blocks[])
     {
         for (int j = 0; j < BLOCKY; j++)
         {
-            //if(blocks[count].isBallHit(VALBALLX, VALBALLY))
             if (blocks[count].Update( devcon, VALBALLX, VALBALLY) )
             {
                 flagY = flagY * -1;

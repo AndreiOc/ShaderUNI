@@ -4,14 +4,14 @@
 class Paddle
 {
 public:
-	Paddle();
+	Paddle(ID3D11Device* dev);
 	/// <summary>
 	/// I update the paddle so i can move it passing all the buffers and the shiftX for the moving 
 	/// </summary>
 	/// <param name="shiftX"></param>
 	/// <param name="dev"></param>
 	/// <param name="devcon"></param>
-	bool Update(float shiftX, ID3D11Device* dev, ID3D11DeviceContext* devcon, float ballX, float ballY);
+	bool Update(float shiftX, ID3D11DeviceContext* devcon, float ballX, float ballY);
 	
 	~Paddle();
 	/// <summary>
@@ -26,10 +26,6 @@ public:
 
 private:
 	ID3D11Buffer* pVBufferPaddle;           // the poitner to the vertex buffer for the paddle
-
-    /// <summary>
-    /// My paddle verrtices
-    /// </summary>
 	VERTEX vertices[4];
 	bool go = true;
 };

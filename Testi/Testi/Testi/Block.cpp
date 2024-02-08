@@ -3,7 +3,7 @@
 Block::Block()
 {}
 
-Block::Block(float posX, float posY)
+Block::Block(ID3D11Device* dev,float posX, float posY)
 {
     float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
     float g = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
@@ -15,14 +15,22 @@ Block::Block(float posX, float posY)
     vertices[2] = { posX + 0.1f,    posY - 0.1f,    0.0f, D3DXCOLOR(r, g, b, 1.0f) };
     vertices[3] = { posX + 0.1f,    posY,           0.0f, D3DXCOLOR(r, g, b, 1.0f) };
 
-    pVBufferBlock = NULL;
+    D3D11_BUFFER_DESC bd;
+    ZeroMemory(&bd, sizeof(bd));
+
+    bd.Usage = D3D11_USAGE_DYNAMIC;                // write access access by CPU and GPU
+    bd.ByteWidth = sizeof(VERTEX) * 4;             // size is the VERTEX struct * 3
+    bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;       // use as a vertex buffer
+    bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;    // allow CPU to write in buffer
+
+    dev->CreateBuffer(&bd, NULL, &pVBufferBlock);       // create the buffer
+
 }
 
 Block::~Block()
-{
-}
+{}
 
-bool Block::Update(ID3D11Device* dev, ID3D11DeviceContext* devcon, float ballX, float ballY)
+bool Block::Update(ID3D11DeviceContext* devcon, float ballX, float ballY)
 {
     if (ballX > vertices[1].X &&
         ballX < vertices[1].X + 0.1f &&
@@ -39,15 +47,6 @@ bool Block::Update(ID3D11Device* dev, ID3D11DeviceContext* devcon, float ballX, 
         UINT stride = sizeof(VERTEX);
         UINT offset = 0;
 
-        D3D11_BUFFER_DESC bd;
-        ZeroMemory(&bd, sizeof(bd));
-
-        bd.Usage = D3D11_USAGE_DYNAMIC;                // write access access by CPU and GPU
-        bd.ByteWidth = sizeof(VERTEX) * 4;             // size is the VERTEX struct * 3
-        bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;       // use as a vertex buffer
-        bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;    // allow CPU to write in buffer
-
-        dev->CreateBuffer(&bd, NULL, &pVBufferBlock);       // create the buffer
         // copy the vertices into the buffer
         D3D11_MAPPED_SUBRESOURCE ms;
         devcon->Map(pVBufferBlock, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms);      // map the buffer

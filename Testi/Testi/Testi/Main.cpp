@@ -22,18 +22,13 @@ float VALBALLY;
 float VALPADDLEX;
 float VALPADDLEY;
 
-
-
 float flagX= 1.0f;
 float flagY = 1.0f;
-
-float RED = 1.0f;
 
 // function prototypes 
 void InitD3D(HWND hWnd);    // sets up and initializes Direct3D
 void RenderFrame(Paddle paddle,Ball ball,Block blocks[]);     // renders a single frame
-void CleanD3D(Paddle paddle);        // closes Direct3D and releases memory
-//void InitGraphics(void);    // creates the shape to render
+void CleanD3D(Paddle paddle, Ball ball, Block blocks[]);        // closes Direct3D and releases memory
 void InitPipeline(void);    // loads and prepares the shaders
 
 // the WindowProc function prototype
@@ -77,26 +72,32 @@ int WINAPI WinMain(HINSTANCE hInstance,
         NULL);
 
     ShowWindow(hWnd, nCmdShow);
-    Paddle paddle;
-    Ball ball;
-    ///array of block how block the ball, now a neeed to the define the move ball
-    Block *blocks = new Block[BLOCKX * BLOCKY];
+    
 
-    int count = 0;
-    for (float i =  -6.0f; i < 7; i++)
-    {
-        for (float j = 0; j < 5; j++)
-        {
-            blocks[count] = Block(i/7.0f,j/5.0f);
-            count++;
-        }
-    }
 
 
     // set up and initialize Direct3D
     InitD3D(hWnd);
 
+
+    Paddle paddle(dev);
+    Ball ball(dev);
+
+    ///array of block how block the ball, now a neeed to the define the move ball
+    Block* blocks = new Block[BLOCKX * BLOCKY];
+
+    int count = 0;
+    for (float i = -6.0f; i < 7; i++)
+    {
+        for (float j = 0; j < 5; j++)
+        {
+            blocks[count] = Block(dev,i / 7.0f, j / 5.0f);
+            count++;
+        }
+    }
+
     MSG msg;
+    
     while (TRUE)
     {
         if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
@@ -115,8 +116,8 @@ int WINAPI WinMain(HINSTANCE hInstance,
     }
 
     // clean up DirectX and COM
-    CleanD3D(paddle);
-
+    CleanD3D(paddle,ball,blocks);
+    
     return msg.wParam;
 }
 
@@ -196,7 +197,6 @@ void InitD3D(HWND hWnd)
     // set the render target as the back buffer
     devcon->OMSetRenderTargets(1, &backbuffer, NULL);
 
-
     // Set the viewport
     D3D11_VIEWPORT viewport;
     ZeroMemory(&viewport, sizeof(D3D11_VIEWPORT));
@@ -224,24 +224,23 @@ void RenderFrame(Paddle paddle, Ball ball, Block blocks[])
     VALBALLY = ball.GetY() + SHIFTINGBALLY;
     VALPADDLEX = paddle.GetX() + SHIFTINGX;
 
-    bool paddleHit = paddle.Update(SHIFTINGX,dev,devcon, VALBALLX, VALBALLY);
-    if (paddleHit)
-    {
+   bool paddleHit = paddle.Update(SHIFTINGX,devcon, VALBALLX, VALBALLY);
+   if (paddleHit)
+   {
         flagY = flagY * -1;//invert the y 
-    }
-  
+   }
     int count = 0;
+   
    
     for (int i = 0; i < BLOCKX; i++)
     {
         for (int j = 0; j < BLOCKY; j++)
         {
             //if(blocks[count].isBallHit(VALBALLX, VALBALLY))
-            if (blocks[count].Update(dev, devcon, VALBALLX, VALBALLY) )
+            if (blocks[count].Update( devcon, VALBALLX, VALBALLY) )
             {
                 flagY = flagY * -1;
             }
-
             count++;
         }
     }
@@ -265,7 +264,7 @@ void RenderFrame(Paddle paddle, Ball ball, Block blocks[])
     }
 
     //here if only i tocuh the border so technicali no problem
-    ball.Update(dev, devcon, SHIFTINGBALLX, SHIFTINGBALLY);
+    ball.Update( devcon, SHIFTINGBALLX, SHIFTINGBALLY);
 
     // switch the back buffer and the front buffer
     swapchain->Present(0, 0);
@@ -273,10 +272,12 @@ void RenderFrame(Paddle paddle, Ball ball, Block blocks[])
 
 
 // this is the function that cleans up Direct3D and COM
-void CleanD3D(Paddle paddle)
+void CleanD3D(Paddle paddle,Ball ball, Block blocks[])
 {
     swapchain->SetFullscreenState(FALSE, NULL);    // switch to windowed mode
 
+    //delete blocks array
+    delete[] blocks;
     // close and release all existing COM objects
     pLayout->Release();
     pVS->Release();
@@ -285,6 +286,7 @@ void CleanD3D(Paddle paddle)
     backbuffer->Release();
     dev->Release();
     devcon->Release();
+
 }
 
 

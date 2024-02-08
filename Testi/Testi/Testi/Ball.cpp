@@ -1,24 +1,10 @@
 #include "Headers/Ball.h"
-Ball::Ball()
+Ball::Ball(ID3D11Device* dev )
 {
     vertices[0] = { -0.025f, -0.55f, 0.0f,      D3DXCOLOR(0.8666666666666667f, 0.8901960784313725f, 0.5725490196078431f, 1.0f) };
     vertices[1] = { -0.025f, -0.5f, 0.0f,       D3DXCOLOR(0.8666666666666667f, 0.8901960784313725f, 0.5725490196078431f, 1.0f) };
     vertices[2] = { 0.025f, -0.55f, 0.0f,       D3DXCOLOR(0.8666666666666667f, 0.8901960784313725f, 0.5725490196078431f, 1.0f) };
     vertices[3] = { 0.025f , -0.5f, 0.0f,       D3DXCOLOR(0.8666666666666667f, 0.8901960784313725f, 0.5725490196078431f, 1.0f) };
-
-    pVBufferBall = NULL;
-}
-
-Ball::~Ball()
-{
-}
-void Ball::Update(ID3D11Device* dev, ID3D11DeviceContext* devcon, float shiftX, float shiftY)
-{
-    Bounce(shiftX, shiftY);
-    UINT stride = sizeof(VERTEX);
-    UINT offset = 0;
-
-
     D3D11_BUFFER_DESC bd;
     ZeroMemory(&bd, sizeof(bd));
 
@@ -28,6 +14,17 @@ void Ball::Update(ID3D11Device* dev, ID3D11DeviceContext* devcon, float shiftX, 
     bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;    // allow CPU to write in buffer
 
     dev->CreateBuffer(&bd, NULL, &pVBufferBall);       // create the buffer
+}
+
+Ball::~Ball()
+{}
+
+void Ball::Update( ID3D11DeviceContext* devcon, float shiftX, float shiftY)
+{
+    Bounce(shiftX, shiftY);
+    UINT stride = sizeof(VERTEX);
+    UINT offset = 0;
+
     // copy the vertices into the buffer
     D3D11_MAPPED_SUBRESOURCE ms;
     devcon->Map(pVBufferBall, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms);      // map the buffer
